@@ -17,28 +17,6 @@ box: golang
     # - mongo
     # http://devcenter.wercker.com/docs/services/mongodb.html
 
-dev:
-  steps:
-  - setup-go-workspace:
-      package-dir:  github.com/chaoshong/go/main
-
-  - script:
-      name: env
-      code: env
-
-  - script:
-      name: go get
-      code: |
-        cd $WERCKER_SOURCE_DIR
-        go version
-        go get -u github.com/Masterminds/glide
-        export PATH=$WERCKER_SOURCE_DIR/bin:$PATH
-        glide  install
-
-  - inernal/watch:
-      code: go run main.go
-      reload: true
-
 build:
   # The steps that will be executed on build
   # Steps make up the actions in your pipeline
@@ -48,34 +26,35 @@ build:
     # Sets the go workspace and places you package
     # at the right place in the workspace tree
     - setup-go-workspace
-        package-dir:  github.com/chaoshong/go/main
+        #package-dir:  github.com/chaoshong/go/main
 
     # Gets the dependencies
 
-    - script:
-      name: env
-      code: env
+    #- script:
+    #  name: env
+    #  code: env
 
     - script:
         name: go get
         code: |
-          cd $WERCKER_SOURCE_DIR
-          go version
-          go get -u github.com/Masterminds/glide
-          export PATH=$WERCKER_SOURCE_DIR/bin:$PATH
-          glide  install
+          #cd $WERCKER_SOURCE_DIR
+          #go version
+          #go get -u github.com/Masterminds/glide
+          #export PATH=$WERCKER_SOURCE_DIR/bin:$PATH
+          #glide  install
+          go get github.com/chaoshong/go/Main
 
     # Build the project
     - script:
         name: go build
         code: |
-          go build
+          go build -o go main.go
 
     # Test the project
     - script:
         name: go test
         code: |
-          go test -v $(glide novendor)
+          go test ./...
 
     - script:
         name: copy files to wercker output
@@ -85,19 +64,17 @@ build:
   deploy:
     steps:
       - internal/docker-push:
-          username: $DOCKER_USERNAME
-          password: $DOCKER_PASSWORD
-          cmd: /pipeline/go/main
-          port: "8080"
+          username: $USERNAME
+          password: $PASSWORD
+          cmd: /go/Main
           tag: latest
           repository: chaoshong/go
-          registry: https://registry.hub.docker.com
 
-      - cng/cf-deploy
-          api: $API
-          user: $USER
-          password: $PASSWORD
-          org: $ORG
-          space: $SPACE
-          appname: wercker-step-hello
-          docker_image: chaoshong/go/hello
+    #   - cng/cf-deploy
+    #       api: $API
+    #       user: $USER
+    #       password: $PASSWORD
+    #       org: $ORG
+    #       space: $SPACE
+    #       appname: wercker-step-hello
+    #       docker_image: chaoshong/go/hello
