@@ -34,7 +34,7 @@ build:
   steps:
     # Sets the go workspace and places you package
     # at the right place in the workspace tree
-    - setup-go-workspace
+    #- setup-go-workspace
         #package-dir:  github.com/chaoshong/go/main
 
     # Gets the dependencies
@@ -42,22 +42,22 @@ build:
     #- script:
     #  name: env
     #  code: env
-
-    - script:
-        name: go get
-        code: |
+    - wercker/golint
+    # - script:
+    #     name: go get
+    #     code: |
           #cd $WERCKER_SOURCE_DIR
           #go version
           #go get -u github.com/Masterminds/glide
           #export PATH=$WERCKER_SOURCE_DIR/bin:$PATH
           #glide  install
-          go get github.com/chaoshong/go/Main
+        #   go get github.com/chaoshong/go/Main
 
     # Build the project
     - script:
         name: go build
         code: |
-          go build -o go main.go
+          go build ./...
 
     # Test the project
     - script:
@@ -65,10 +65,10 @@ build:
         code: |
           go test ./...
 
-    - script:
-        name: copy files to wercker output
-        code: |
-          cp -R ./ ${WERCKER_OUTPUT_DIR}
+    # - script:
+    #     name: copy files to wercker output
+    #     code: |
+    #       cp -R ./ ${WERCKER_OUTPUT_DIR}
 
   deploy:
     steps:
