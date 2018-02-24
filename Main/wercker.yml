@@ -3,7 +3,10 @@
 # If you want Google's container you would reference google/golang
 # Read more about containers on our dev center
 # http://devcenter.wercker.com/docs/containers/index.html
-box: golang
+box: 
+    id: golang
+    ports:
+        - "5000"
 # This is the build pipeline. Pipelines are the core of wercker
 # Read more about pipelines on our dev center
 # http://devcenter.wercker.com/docs/pipelines/index.html
@@ -16,7 +19,13 @@ box: golang
 
     # - mongo
     # http://devcenter.wercker.com/docs/services/mongodb.html
-
+dev:
+  steps:
+    - internal/watch:
+        code: |
+            go build ./...
+            ./source
+        reload: true
 build:
   # The steps that will be executed on build
   # Steps make up the actions in your pipeline
