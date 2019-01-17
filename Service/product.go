@@ -6,8 +6,8 @@ import (
 
 	"reflect"
 
-	sql "../Database"
-	models "../Models"
+	sql "github.com/chaoshong/goecommerce/Databases"
+	models "github.com/chaoshong/goecommerce/Models"
 	"github.com/tealeg/xlsx"
 )
 

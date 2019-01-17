@@ -1,52 +1,42 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"html/template"
 	"net/http"
-	"time"
+	"strconv"
 
-	api "./Api"
-	sql "./Database"
-	models "./Models"
-	service "./Service"
-
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
+	sql "github.com/chaoshong/goecommerce/Databases"
+	models "github.com/chaoshong/goecommerce/Models"
+	service "github.com/chaoshong/goecommerce/Service"
+	serviceS "github.com/chaoshong/goecommerce/Service/Supplier"
 )
 
 func main() {
-	// server := http.Server{
-	// 	Addr: "127.0.0.1:8080",
-	// }
-	// http.HandleFunc("/stock/", stock)
-	// server.ListenAndServe()
-	// Init()
-
-	// initServer()
 
 	sql.Init()
+	//serviceS.GetProductFromWyl()
+	server := http.Server{
+		Addr: "127.0.0.1:8080",
+	}
 
-	router := mux.NewRouter()
-	router.HandleFunc("/stock", api.ListStock).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8080", handlers.CORS(handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD"}), handlers.AllowedOrigins([]string{"*"}))(router)))
-	// Db.Create(stocks)
-	//WriteStocks(stocks)
+	http.HandleFunc("/wylview", handleWylview)
+	http.HandleFunc("/wyl", handleWyl)
+	http.HandleFunc("/wylwarehouse", handleWylWarehouse)
+	http.HandleFunc("/wylgetSPU", handleWylSPUList)
 
-	updateStock()
-	//InitPostCodeZone()
-	// updateOrder("/users/hgz/downloads/orderlittleboss.xlsx")
-	//updateProduct()
-	// api.ListStock(new http.ResponseWriter,new http.Request)
-}
+	server.ListenAndServe()
 
-func updateStock() {
-	var stocks []models.Stock
-	var count int
-	stocks = service.ReadStockExcel()
-	sql.WriteStocks(stocks)
-	stocks, count = sql.GetStocks(time.Date(2018, 6, 5, 0, 0, 0, 0, time.Local))
+	// http.HandleFunc("/stock/", stock)
+	// Init()
 
-	service.WriteSoldeazyExcel(stocks, count)
+	// var count int
+	// stocks = service.ReadStockExcel()
+	// sql.WriteStocks(stocks)
+	// stocks, count = sql.GetStocks(time.Date(2018, 6, 5, 0, 0, 0, 0, time.Local))
+
+	// service.WriteSoldeazyExcel(stocks, count)
+
 }
 
 func updateOrder(filePath string) {
@@ -64,4 +54,42 @@ func updateOrder(filePath string) {
 func updateProduct() {
 
 	service.ReadExcel()
+}
+
+func handleWylview(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("client.html")
+	t.Execute(w, nil)
+
+	http.Redirect(w, r, "/wyl", http.StatusOK)
+}
+func handleWyl(w http.ResponseWriter, r *http.Request) {
+
+	wylInArg := serviceS.WylInArg{}
+	wylInArg.PageParams.PageSize = 200
+	wylInArg.PageParams.PageNo = 1
+	r.ParseForm()
+	fmt.Printf("URL Wyl %v  %v  %v\n",
+		r.FormValue("pageSize"), r.FormValue("pageNo"), r.FormValue("warehouseCode"))
+	wylInArg.PageParams.PageSize, _ = strconv.Atoi(r.FormValue("pageSize"))
+	wylInArg.PageParams.PageNo, _ = strconv.Atoi(r.FormValue("pageNo"))
+	wylInArg.WarehouseCode = r.FormValue("warehouseCode")
+
+	wylResult, _ := serviceS.GetProductFromWyl(wylInArg)
+
+	fmt.Fprintf(w, "%v\n", wylResult)
+	sql.WriteWylSPUList(wylResult.Data.SPUList)
+}
+
+func handleWylWarehouse(w http.ResponseWriter, r *http.Request) {
+
+	whResult, _ := serviceS.GetWarehouseFromWyl()
+
+	fmt.Fprintf(w, "%v\n", whResult)
+	sql.WriteWylWarehouseList(whResult)
+}
+
+func handleWylSPUList(w http.ResponseWriter, r *http.Request) {
+	SPU := sql.GetWylSPUList()
+	fmt.Fprintf(w, "%v\n", SPU)
+	serviceS.WriteSPUListExcel(SPU)
 }

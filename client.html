@@ -5,9 +5,13 @@
         <title>goEcommerce</title>
     </head>
     <body>
-        <form action="http://127.0.0.1:8080/stock" method="get"  enctype="multipart/form-data">
-            <input type="file" name="uploaded" /><a>请上传库存文件</a>
-            <input type="submit" />
-    </form>
+        <form action="http://127.0.0.1:8080/wyl" method="get"  enctype="multipart/form-data">
+                <input type="text" name="pageSize" /><a>请输入每页数量</a>
+                <input type="text" name="pageNo" /><a>请输入页数</a>
+                <input type="text" name="warehouseCode" /><a>请输入仓库代码</a>
+                <input type="submit" />
+        </form>
+        <h1>产品数量 ：{{.TotalCount}} </h1>
+        
     </body>
 </html>
