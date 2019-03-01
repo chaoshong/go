@@ -8,9 +8,10 @@ import (
 
 	"reflect"
 
-	models "github.com/chaoshong/goecommerce/Models"
-	service "github.com/chaoshong/goecommerce/Service/Supplier"
+	models "github.com/chaoshong/go/Models"
+	service "github.com/chaoshong/go/Service/Supplier"
 	"github.com/jinzhu/gorm"
+
 	//_ "github.com/lib/pq"
 	_ "github.com/go-sql-driver/mysql"
 )

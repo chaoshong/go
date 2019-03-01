@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"strconv"
 
-	sql "github.com/chaoshong/goecommerce/Databases"
-	models "github.com/chaoshong/goecommerce/Models"
-	service "github.com/chaoshong/goecommerce/Service"
-	serviceS "github.com/chaoshong/goecommerce/Service/Supplier"
+	sql "github.com/chaoshong/go/Databases"
+	models "github.com/chaoshong/go/Models"
+	service "github.com/chaoshong/go/Service"
+	serviceS "github.com/chaoshong/go/Service/Supplier"
 )
 
 func main() {

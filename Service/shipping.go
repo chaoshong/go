@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	sql "github.com/chaoshong/goecommerce/Databases"
-	models "github.com/chaoshong/goecommerce/Models"
+	sql "github.com/chaoshong/go/Databases"
+	models "github.com/chaoshong/go/Models"
 	"github.com/tealeg/xlsx"
 )
 
