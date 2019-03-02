@@ -4,13 +4,24 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"strings"
 
-	"github.com/PuerkitoBio/goquery"
+	goquery "github.com/PuerkitoBio/goquery"
 )
 
 func queryExampleTwo() {
-	doc, err := goquery.NewDocument("https://www.feixiaohao.com/")
+	res, err = http.Get("https://www.feixiaohao.com/")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
+	}
+
+	// Load the HTML document
+	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
