@@ -14,6 +14,7 @@ import (
 
 func main() {
 
+	spider.queryExampleTwo()
 	sql.Init()
 	//serviceS.GetProductFromWyl()
 	server := http.Server{

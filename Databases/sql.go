@@ -12,8 +12,8 @@ import (
 	service "github.com/chaoshong/go/Service/Supplier"
 	"github.com/jinzhu/gorm"
 
-	//_ "github.com/lib/pq"
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 )
 
 var Db *gorm.DB
@@ -21,13 +21,13 @@ var Db *gorm.DB
 func Init() {
 	var err error
 	fmt.Println("open\n")
-	//Db, err = gorm.Open("postgres", "user=hgz password=hgz dbname=hgz sslmode=disable")
-	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s",
-		"root",
-		"hgz",
-		"127.0.0.1:3306",
-		"ecom")
-	Db, err = gorm.Open("mysql", dsn)
+	Db, err = gorm.Open("postgres", "user=postgres password=hgz dbname=postgres sslmode=disable")
+	// dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s",
+	// 	"root",
+	// 	"hgz",
+	// 	"127.0.0.1:3306",
+	// 	"ecom")
+	// Db, err = gorm.Open("mysql", dsn)
 	if err != nil {
 		panic(err)
 	}
