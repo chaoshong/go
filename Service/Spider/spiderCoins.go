@@ -10,8 +10,8 @@ import (
 	goquery "github.com/PuerkitoBio/goquery"
 )
 
-func queryExampleTwo() {
-	res, err = http.Get("https://www.feixiaohao.com/")
+func QueryExampleTwo() {
+	res, err := http.Get("https://www.feixiaohao.com/")
 	if err != nil {
 		log.Fatal(err)
 	}
