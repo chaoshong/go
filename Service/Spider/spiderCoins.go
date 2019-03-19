@@ -28,6 +28,7 @@ func QueryExampleTwo() {
 	var allData []CoinInfo
 	doc.Find("table tbody tr").Each(func(i int, selector *goquery.Selection) {
 		var data CoinInfo
+		//println("rank: %v",string.(selector))
 		Rank := selector.Find("td").Eq(0).Text()
 		CoinName := strings.TrimSpace(selector.Find("td").Eq(1).Text())
 		CurrentCount := selector.Find("td").Eq(2).Text()

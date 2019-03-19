@@ -14,6 +14,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
+	"github.com/chaoshong/go/inframe/config"
 )
 
 var Db *gorm.DB
@@ -21,6 +22,8 @@ var Db *gorm.DB
 func Init() {
 	var err error
 	fmt.Println("open\n")
+	dbstring := config.GetDBInfo()
+	fmt.Println("db string is : %s", dbstring)
 	Db, err = gorm.Open("postgres", "user=postgres password=hgz dbname=postgres sslmode=disable")
 	// dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s",
 	// 	"root",
