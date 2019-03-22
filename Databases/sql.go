@@ -12,9 +12,9 @@ import (
 	service "github.com/chaoshong/go/Service/Supplier"
 	"github.com/jinzhu/gorm"
 
+	"github.com/chaoshong/go/inframe/config"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
-	"github.com/chaoshong/go/inframe/config"
 )
 
 var Db *gorm.DB
@@ -24,17 +24,10 @@ func Init() {
 	fmt.Println("open\n")
 	dbstring := config.GetDBInfo()
 	fmt.Println("db string is : %s", dbstring)
-	Db, err = gorm.Open("postgres", "user=postgres password=hgz dbname=postgres sslmode=disable")
-	// dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s",
-	// 	"root",
-	// 	"hgz",
-	// 	"127.0.0.1:3306",
-	// 	"ecom")
-	// Db, err = gorm.Open("mysql", dsn)
+	Db, err = gorm.Open("postgres", dbstring)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("open success\n")
 	Db.AutoMigrate(&service.WarehouseList{}, &service.SPUList{}, &service.SKUList{}, &service.ItemPropertyList{}, &service.UDefinedCategoryList{},
 		&service.CategoryList{})
 	//&models.Stock{}, &models.Employee{}, &models.OrderBalance{}, &models.OrderLittleBoss{},
