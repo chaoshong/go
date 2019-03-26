@@ -2,38 +2,54 @@ package config
 
 import (
 	"fmt"
+	"runtime"
 
 	"github.com/spf13/viper"
 )
 
 func init() {
-	viper.SetConfigName("dbconfig")
-	viper.AddConfigPath("$GOPATH/src/dbconfig")
+
+}
+
+type DbInfo struct {
+	Dbname   string
+	Host     string
+	Port     string
+	User     string
+	Password string
+	Sslmode  string
+}
+
+type Db struct {
+	DbType string
+	Db     DbInfo
+}
+
+func GetDBInfo() (string, string) {
+	Os := runtime.GOOS
+	// 获取系统类型，win 系统用 %，linux 用 $
+	if Os == "windows" {
+		viper.AddConfigPath("%GOPATH/src/config")
+		fmt.Println("windows")
+
+	} else {
+		viper.AddConfigPath("$GOPATH/src/config")
+		fmt.Println("Linux")
+	}
+	viper.SetConfigName("db")
 	viper.SetConfigType("yml")
 	err := viper.ReadInConfig()
 	if err != nil {
 		fmt.Println("read DB error: %v", err)
 	}
 
-}
+	var dbs Db
+	err = viper.Unmarshal(&dbs)
+	if err != nil {
+		fmt.Println("read info error: %v", err)
+	}
 
-func GetDBInfo() string {
-	var (
-		dbName   string
-		port     string
-		user     string
-		sslMode  string
-		password string
-		host     string
-	)
-
-	dbName = viper.GetString("PostgreSql.db.dbname")
-	port = viper.GetString("PostgreSql.db.port")
-	user = viper.GetString("PostgreSql.db.user")
-	sslMode = viper.GetString("PostgreSql.db.sslmode")
-	password = viper.GetString("PostgreSql.db.password")
-	host = viper.GetString("PostgreSql.db.host")
-
-	return fmt.Sprintf("host=%s user=%s dbname=%s port=%s sslmode=%s password=%s", host, user, dbName, port, sslMode, password)
+	return dbs.DbType, fmt.Sprintf("host=%s user=%s dbname=%s port=%s sslmode=%s password=%s",
+		dbs.Db.Host, dbs.Db.User, dbs.Db.Dbname, dbs.Db.Port, dbs.Db.Sslmode, dbs.Db.Password)
 
 }
