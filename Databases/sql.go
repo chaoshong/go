@@ -22,9 +22,9 @@ var Db *gorm.DB
 func Init() {
 	var err error
 	fmt.Println("open\n")
-	dbstring := config.GetDBInfo()
-	fmt.Println("db string is : %s", dbstring)
-	Db, err = gorm.Open("postgres", dbstring)
+	dbType, dbString := config.GetDBInfo()
+	fmt.Println("db type is :%s , db string is : %s", dbType, dbString)
+	Db, err = gorm.Open(dbType, dbString)
 	if err != nil {
 		panic(err)
 	}
