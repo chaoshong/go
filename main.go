@@ -9,13 +9,14 @@ import (
 	sql "github.com/chaoshong/go/Databases"
 	models "github.com/chaoshong/go/Models"
 	service "github.com/chaoshong/go/Service"
-	spider "github.com/chaoshong/go/Service/Spider"
 	serviceS "github.com/chaoshong/go/Service/Supplier"
+	spider "github.com/chaoshong/go/Service/spider"
 )
 
 func main() {
 
-	spider.QueryExampleTwo()
+
+	spider.GetRecruitment()
 	sql.Init()
 	//serviceS.GetProductFromWyl()
 	server := http.Server{
@@ -28,6 +29,7 @@ func main() {
 	http.HandleFunc("/wylgetSPU", handleWylSPUList)
 
 	server.ListenAndServe()
+	
 
 	// http.HandleFunc("/stock/", stock)
 	// Init()

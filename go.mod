@@ -4,20 +4,30 @@ require (
 	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/Unknwon/com v0.0.0-20190214221849-2d12a219ccaf // indirect
 	github.com/Unknwon/goconfig v0.0.0-20181105214110-56bd8ab18619 // indirect
+	github.com/antchfx/htmlquery v1.0.0 // indirect
+	github.com/antchfx/xmlquery v1.0.0 // indirect
+	github.com/antchfx/xpath v0.0.0-20190319080838-ce1d48779e67 // indirect
 	github.com/aybabtme/color v0.0.0-20140713052517-28ad4cc941d6 // indirect
 	github.com/codegangsta/cli v1.20.0 // indirect
 	github.com/denisenkom/go-mssqldb v0.0.0-20190111225525-2fea367d496d // indirect
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
 	github.com/go-sql-driver/mysql v1.4.1
+	github.com/gobwas/glob v0.2.3 // indirect
+	github.com/gocolly/colly v1.2.0
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/gpmgo/gopm v0.6.5 // indirect
+	github.com/jawher/mow.cli v1.0.5 // indirect
 	github.com/jinzhu/gorm v1.9.2
 	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a // indirect
 	github.com/jinzhu/now v0.0.0-20181116074157-8ec929ed50c3 // indirect
+	github.com/kennygrant/sanitize v1.2.4 // indirect
 	github.com/lib/pq v1.0.0
 	github.com/mattn/go-sqlite3 v1.10.0 // indirect
+	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/spf13/viper v1.3.2
 	github.com/tealeg/xlsx v1.0.3
+	github.com/temoto/robotstxt v0.0.0-20180810133444-97ee4a9ee6ea // indirect
+	google.golang.org/appengine v1.5.0 // indirect
 )
 
 replace (
