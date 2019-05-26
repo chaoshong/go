@@ -1,4 +1,4 @@
-package Databases
+package dao
 
 import (
 	"fmt"

@@ -7,8 +7,8 @@ import (
 )
 
 func GetRecruitment() {
-	c := colly.NewCollector(
-		colly.AllowedDomains("go-colly.org"))
+	c := colly.NewCollector()
+		//colly.AllowedDomains("go-colly.org"))
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		e.Request.Visit(e.Attr("href"))
 	})
@@ -18,5 +18,5 @@ func GetRecruitment() {
 	})
 
 
-	c.Visit("http://go-colly.org/")
+	c.Visit("http://51job.com/")
 }
