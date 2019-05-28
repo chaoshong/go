@@ -8,7 +8,7 @@ import (
 
 	"reflect"
 
-	models "github.com/chaoshong/go/Models"
+	models "github.com/chaoshong/go/Model"
 	service "github.com/chaoshong/go/Service/Supplier"
 	"github.com/jinzhu/gorm"
 

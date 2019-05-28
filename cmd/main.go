@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"fmt"
@@ -6,15 +6,14 @@ import (
 	"net/http"
 	"strconv"
 
-	sql "github.com/chaoshong/go/Databases"
-	models "github.com/chaoshong/go/Models"
+	models "github.com/chaoshong/go/Model"
 	service "github.com/chaoshong/go/Service"
 	serviceS "github.com/chaoshong/go/Service/Supplier"
 	spider "github.com/chaoshong/go/Service/spider"
+	sql "github.com/chaoshong/go/dao"
 )
 
 func main() {
-
 
 	spider.GetRecruitment()
 	sql.Init()
@@ -29,7 +28,6 @@ func main() {
 	http.HandleFunc("/wylgetSPU", handleWylSPUList)
 
 	server.ListenAndServe()
-	
 
 	// http.HandleFunc("/stock/", stock)
 	// Init()
