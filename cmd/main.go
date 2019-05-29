@@ -9,13 +9,12 @@ import (
 	models "github.com/chaoshong/go/Model"
 	service "github.com/chaoshong/go/Service"
 	serviceS "github.com/chaoshong/go/Service/Supplier"
-	spider "github.com/chaoshong/go/Service/spider"
 	sql "github.com/chaoshong/go/dao"
 )
 
 func main() {
 
-	spider.GetRecruitment()
+	//spider.GetRecruitment()
 	sql.Init()
 	//serviceS.GetProductFromWyl()
 	server := http.Server{

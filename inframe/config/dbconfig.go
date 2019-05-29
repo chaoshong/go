@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"os"
 	"runtime"
 
 	"github.com/spf13/viper"
@@ -29,7 +30,8 @@ func GetDBInfo() (string, string) {
 	Os := runtime.GOOS
 	// 获取系统类型，win 系统用 %，linux 用 $
 	if Os == "windows" {
-		viper.AddConfigPath("%GOPATH/src/config")
+		//viper.AddConfigPath("d:/golang/src/dbconfig")
+		viper.AddConfigPath(os.Getenv("GOPATH") + "/src/dbconfig")
 		fmt.Println("windows")
 
 	} else {
