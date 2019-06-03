@@ -2,10 +2,8 @@ package config
 
 import (
 	"fmt"
-	"os"
-	"runtime"
-
 	"github.com/spf13/viper"
+	"os"
 )
 
 func init() {
@@ -27,17 +25,8 @@ type Db struct {
 }
 
 func GetDBInfo() (string, string) {
-	Os := runtime.GOOS
-	// 获取系统类型，win 系统用 %，linux 用 $
-	if Os == "windows" {
-		//viper.AddConfigPath("d:/golang/src/dbconfig")
-		viper.AddConfigPath(os.Getenv("GOPATH") + "/src/dbconfig")
-		fmt.Println("windows")
 
-	} else {
-		viper.AddConfigPath("$GOPATH/src/config")
-		fmt.Println("Linux")
-	}
+	viper.AddConfigPath(os.Getenv("GOPATH") + "/src/config")
 	viper.SetConfigName("db")
 	viper.SetConfigType("yml")
 	err := viper.ReadInConfig()
