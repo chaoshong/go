@@ -30,16 +30,6 @@ func main() {
 
 	server.ListenAndServe()
 
-	// http.HandleFunc("/stock/", stock)
-	// Init()
-
-	// var count int
-	// stocks = service.ReadStockExcel()
-	// sql.WriteStocks(stocks)
-	// stocks, count = sql.GetStocks(time.Date(2018, 6, 5, 0, 0, 0, 0, time.Local))
-
-	// service.WriteSoldeazyExcel(stocks, count)
-
 }
 
 func updateOrder(filePath string) {
