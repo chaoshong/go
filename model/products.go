@@ -2,7 +2,7 @@ package model
 
 //产品基本信息表
 type Products struct {
-	Id                int     `gorm: "not null"`
+	ID                int     `gorm: "primary_key"`
 	ProductCategoryId int     `gorm: "not null"`
 	SPU               string  `gorm: "type:char(10),NOT NULL"`
 	Cname             string  `gorm: "type:varchar(127)"`
