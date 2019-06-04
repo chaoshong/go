@@ -6,9 +6,11 @@ import (
 	"strings"
 	"time"
 
-	models "github.com/chaoshong/go/Model"
 	sql "github.com/chaoshong/go/dao"
+	models "github.com/chaoshong/go/model"
 	"github.com/tealeg/xlsx"
+
+	"github.com/chaoshong/go/inframe/db"
 )
 
 func InitPostCodeZone() {
@@ -25,7 +27,7 @@ func InitPostCodeZone() {
 	var postzone models.PostZone
 	var postFees []models.PostFee
 	var postFee models.PostFee
-	rows, err := sql.Db.Find(&postzone).Rows()
+	rows, err := db.PostgreDb.Find(&postzone).Rows()
 	checkerr(err, "get table rows")
 	columns.tableColumns, err = rows.Columns()
 	for _, column := range columns.tableColumns {

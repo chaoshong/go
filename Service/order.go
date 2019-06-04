@@ -7,9 +7,11 @@ import (
 	"strings"
 	"time"
 
-	models "github.com/chaoshong/go/Model"
 	sql "github.com/chaoshong/go/dao"
+	models "github.com/chaoshong/go/model"
 	"github.com/tealeg/xlsx"
+
+	"github.com/chaoshong/go/inframe/db"
 )
 
 func ReadOrderExcel(filePath string) {
@@ -26,7 +28,7 @@ func ReadOrderExcel(filePath string) {
 	var columns = new(Columns)
 	var orderLbs []models.OrderLittleBoss
 	var order models.OrderLittleBoss
-	rows, err := sql.Db.Find(&order).Rows()
+	rows, err := db.PostgreDb.Find(&order).Rows()
 	checkerr(err, "get table rows")
 	columns.tableColumns, err = rows.Columns()
 	for _, column := range columns.tableColumns {

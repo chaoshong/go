@@ -6,9 +6,10 @@ import (
 
 	"reflect"
 
-	models "github.com/chaoshong/go/Model"
-	sql "github.com/chaoshong/go/dao"
+	models "github.com/chaoshong/go/model"
 	"github.com/tealeg/xlsx"
+
+	"github.com/chaoshong/go/inframe/db"
 )
 
 func ReadExcel() {
@@ -24,7 +25,7 @@ func ReadExcel() {
 	var columns = new(Columns)
 	var productcommon models.ProductCommon
 	//tablename := "ProductCommon"
-	rows, err := sql.Db.Find(&productcommon).Rows()
+	rows, err := db.PostgreDb.Find(&productcommon).Rows()
 	checkerr(err, "get table rows")
 	columns.tableColumns, err = rows.Columns()
 	for _, column := range columns.tableColumns {
@@ -63,7 +64,7 @@ func ReadExcel() {
 				}
 				//fmt.Println("productcommon is  : \n", productcommon)
 
-				sql.Db.Create(&productcommon)
+				db.PostgreDb.Create(&productcommon)
 				count++
 			}
 

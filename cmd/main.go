@@ -6,16 +6,18 @@ import (
 	"net/http"
 	"strconv"
 
-	models "github.com/chaoshong/go/Model"
 	service "github.com/chaoshong/go/Service"
 	serviceS "github.com/chaoshong/go/Service/Supplier"
 	sql "github.com/chaoshong/go/dao"
+	"github.com/chaoshong/go/model"
+
+	"github.com/chaoshong/go/inframe/db"
 )
 
 func main() {
 
 	//spider.GetRecruitment()
-	sql.Init()
+	db.Init()
 	//serviceS.GetProductFromWyl()
 	server := http.Server{
 		Addr: "127.0.0.1:8080",
@@ -41,7 +43,7 @@ func main() {
 }
 
 func updateOrder(filePath string) {
-	var ordersLs []models.OrderLittleBoss
+	var ordersLs []model.OrderLittleBoss
 
 	var count int
 	service.ReadOrderExcel(filePath)

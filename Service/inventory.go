@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"time"
 
-	models "github.com/chaoshong/go/Model"
 	sql "github.com/chaoshong/go/dao"
+	models "github.com/chaoshong/go/model"
 	"github.com/tealeg/xlsx"
 )
 

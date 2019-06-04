@@ -8,40 +8,17 @@ import (
 
 	"reflect"
 
-	models "github.com/chaoshong/go/Model"
 	service "github.com/chaoshong/go/Service/Supplier"
-	"github.com/jinzhu/gorm"
+	"github.com/chaoshong/go/model"
 
-	"github.com/chaoshong/go/inframe/config"
-	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/lib/pq"
+	"github.com/chaoshong/go/inframe/db"
 )
 
-var Db *gorm.DB
-
-func Init() {
-	var err error
-	fmt.Println("open\n")
-	dbType, dbString := config.GetDBInfo()
-	fmt.Println("db type is :%s , db string is : %s", dbType, dbString)
-	Db, err = gorm.Open(dbType, dbString)
-	if err != nil {
-		panic(err)
-	}
-	Db.AutoMigrate(&service.WarehouseList{}, &service.SPUList{}, &service.SKUList{}, &service.ItemPropertyList{}, &service.UDefinedCategoryList{},
-		&service.CategoryList{})
-	//&models.Stock{}, &models.Employee{}, &models.OrderBalance{}, &models.OrderLittleBoss{},
-	//&models.OrderIsale{}, &models.PostFee{}, &models.PostZone{}, &models.ProductCommon{},
-
-	fmt.Println("create table\n")
-
-}
-
 func Column(tableName string) {
-	stock := models.Stock{}
+	stock := model.Stock{}
 	query := "select * from " + tableName + " limit 1"
 	fmt.Println("query \n", query)
-	columns := Db.NewScope(stock).Fields()
+	columns := db.PostgreDb.NewScope(stock).Fields()
 	// checkerr(err1, "get row")
 	fmt.Println("get table columns\n", reflect.TypeOf(columns))
 	// column, err := row.Columns()
@@ -51,7 +28,7 @@ func Column(tableName string) {
 	}
 }
 
-func WriteStocks(stocks []models.Stock) {
+func WriteStocks(stocks []model.Stock) {
 	// for i, stock := range stocks {
 	// 	if i < 100 {
 	// 		fmt.Println("stock : \n", stock)
@@ -62,66 +39,66 @@ func WriteStocks(stocks []models.Stock) {
 	fmt.Println("start insert table : \n")
 	for _, stock := range stocks {
 		if stock.Sku != "" || stock.ParentTitle != "" {
-			stockDb := Db.Where(&models.Stock{Sku: stock.Sku, SaleNums: stock.SaleNums, StockDay: stock.StockDay}).First(&stock)
+			stockDb := db.PostgreDb.Where(&model.Stock{Sku: stock.Sku, SaleNums: stock.SaleNums, StockDay: stock.StockDay}).First(&stock)
 			//fmt.Println("find table : \n", stockDb)
 			if stockDb != nil {
-				Db.Create(&stock)
+				db.PostgreDb.Create(&stock)
 			}
 		}
 	}
 
 }
 
-func GetStocks(stockDay time.Time) (stocks []models.Stock, count int) {
+func GetStocks(stockDay time.Time) (stocks []model.Stock, count int) {
 
-	Db.Where(&models.Stock{StockDay: stockDay}).Find(&stocks).Count(&count)
+	db.PostgreDb.Where(&model.Stock{StockDay: stockDay}).Find(&stocks).Count(&count)
 
 	return stocks, count
 }
 
-func GetEmployee() (employee []models.Employee) {
+func GetEmployee() (employee []model.Employee) {
 
-	Db.Find(&employee)
+	db.PostgreDb.Find(&employee)
 
 	return employee
 }
 
-func WriteEmployee(em []models.Employee) {
+func WriteEmployee(em []model.Employee) {
 	fmt.Println("start insert employee : \n")
 	for _, e := range em {
 
-		Db.Create(&e)
+		db.PostgreDb.Create(&e)
 
 	}
 }
-func WriteOrdersLittleBoss(ordersLbs []models.OrderLittleBoss) {
+func WriteOrdersLittleBoss(ordersLbs []model.OrderLittleBoss) {
 
 	fmt.Println("start insert table OrdersLittleBoss : \n")
 	for _, ordersLb := range ordersLbs {
 		if ordersLb.OrderId != "" || ordersLb.ListingSKu != "" || ordersLb.Quantity != 0 {
 
-			Db.FirstOrCreate(&ordersLb, models.OrderLittleBoss{ConsigneeName: ordersLb.ConsigneeName, OrderId: ordersLb.OrderId, ListingSKu: ordersLb.ListingSKu, Quantity: ordersLb.Quantity})
+			db.PostgreDb.FirstOrCreate(&ordersLb, model.OrderLittleBoss{ConsigneeName: ordersLb.ConsigneeName, OrderId: ordersLb.OrderId, ListingSKu: ordersLb.ListingSKu, Quantity: ordersLb.Quantity})
 
 		}
 	}
 
 }
 
-func GetOrderLittleBoss(orderHandled string) (orderlb []models.OrderLittleBoss, count int) {
-	Db.Where(&models.OrderLittleBoss{OrderHandled: orderHandled}).Find(&orderlb).Count(&count)
+func GetOrderLittleBoss(orderHandled string) (orderlb []model.OrderLittleBoss, count int) {
+	db.PostgreDb.Where(&model.OrderLittleBoss{OrderHandled: orderHandled}).Find(&orderlb).Count(&count)
 
 	return orderlb, count
 }
-func GetOrderBalance(orderHandled string) (orderbln []models.OrderBalance, count int) {
-	Db.Where(&models.OrderBalance{OrderHandled: orderHandled}).Find(&orderbln).Count(&count)
+func GetOrderBalance(orderHandled string) (orderbln []model.OrderBalance, count int) {
+	db.PostgreDb.Where(&model.OrderBalance{OrderHandled: orderHandled}).Find(&orderbln).Count(&count)
 
 	return orderbln, count
 }
-func UpdateBalanceHandle(orderbln []models.OrderBalance) {
-	Db.Model(&orderbln).Update("OrderHandled", "1")
+func UpdateBalanceHandle(orderbln []model.OrderBalance) {
+	db.PostgreDb.Model(&orderbln).Update("OrderHandled", "1")
 }
 
-func WriteOrdersIsale(ordersIsale []models.OrderIsale) {
+func WriteOrdersIsale(ordersIsale []model.OrderIsale) {
 
 	fmt.Println("start insert table OrderIsale : \n")
 	for _, orderIsale := range ordersIsale {
@@ -129,13 +106,13 @@ func WriteOrdersIsale(ordersIsale []models.OrderIsale) {
 			//orderIsale := Db.Where(&Stock{Sku: stock.Sku, SaleNums: stock.SaleNums, StockDay: stock.StockDay}).First(&stock)
 			//fmt.Println("find table : \n", stockDb)
 			//if stockDb != nil {
-			Db.FirstOrCreate(&orderIsale, models.OrderIsale{ConsigneeName: orderIsale.ConsigneeName, OrderId: orderIsale.OrderId, ListingSKu: orderIsale.ListingSKu, Quantity: orderIsale.Quantity})
+			db.PostgreDb.FirstOrCreate(&orderIsale, model.OrderIsale{ConsigneeName: orderIsale.ConsigneeName, OrderId: orderIsale.OrderId, ListingSKu: orderIsale.ListingSKu, Quantity: orderIsale.Quantity})
 			//}
 		}
 	}
 
 }
-func WriteOrdersBalance(ordersBalance []models.OrderBalance) {
+func WriteOrdersBalance(ordersBalance []model.OrderBalance) {
 
 	fmt.Println("start insert table OrderBalance : \n")
 	for _, value := range ordersBalance {
@@ -143,38 +120,38 @@ func WriteOrdersBalance(ordersBalance []models.OrderBalance) {
 			//orderIsale := Db.Where(&Stock{Sku: stock.Sku, SaleNums: stock.SaleNums, StockDay: stock.StockDay}).First(&stock)
 			//fmt.Println("find table : \n", stockDb)
 			//if stockDb != nil {
-			Db.FirstOrCreate(&value, models.OrderBalance{FullName: value.FullName, OrderId: value.OrderId, SalesSku: value.SalesSku, Qty: value.Qty})
+			db.PostgreDb.FirstOrCreate(&value, model.OrderBalance{FullName: value.FullName, OrderId: value.OrderId, SalesSku: value.SalesSku, Qty: value.Qty})
 			//}
 		}
 	}
 
 }
 
-func GetCostOrder(order models.OrderBalance) (rtnOrder models.OrderBalance) {
+func GetCostOrder(order model.OrderBalance) (rtnOrder model.OrderBalance) {
 	fmt.Println("start get table OrderBalance by getcostorder : \n")
-	stock := models.Stock{}
-	product := models.ProductCommon{}
+	stock := model.Stock{}
+	product := model.ProductCommon{}
 	startcode, _ := strconv.Atoi(strings.TrimSpace(order.Postcode))
 	//fmt.Printf("get cost order startcode is %d, order is %s ,err is %s \n", startcode, order.Postcode, err)
 	endcode := startcode
-	postzone := models.PostZone{}
-	postfee := models.PostFee{}
-	Db.Where(&models.Stock{Sku: order.ProductSKU}).Find(&stock)
-	Db.Where(&models.ProductCommon{SKU: order.ProductSKU}).Find(&product)
+	postzone := model.PostZone{}
+	postfee := model.PostFee{}
+	db.PostgreDb.Where(&model.Stock{Sku: order.ProductSKU}).Find(&stock)
+	db.PostgreDb.Where(&model.ProductCommon{SKU: order.ProductSKU}).Find(&product)
 	//fmt.Printf("get cost order stock num is %d, stock date is %s ,product price is %d \n", stock.SaleNums, stock.StockDay, product.ProductPrice)
-	postzone = GetPostCodeDest(models.PostZone{StartCode: startcode, EndCode: endcode}, "0")
+	postzone = GetPostCodeDest(model.PostZone{StartCode: startcode, EndCode: endcode}, "0")
 
 	if postzone.Destination == "" {
-		postzone = GetPostCodeDest(models.PostZone{StartCode: startcode, EndCode: endcode}, "1")
+		postzone = GetPostCodeDest(model.PostZone{StartCode: startcode, EndCode: endcode}, "1")
 	}
 	if postzone.RemoteArea == "" {
 		postzone.RemoteArea = "0"
 	}
 
 	weight := product.Weight * float64(order.ProductQty)
-	Db.Where("\"StartWeight\"<= ? and \"EndWeight\">=? and \"RemoteArea\" =?", weight, weight, postzone.RemoteArea).First(&postfee)
+	db.PostgreDb.Where("\"StartWeight\"<= ? and \"EndWeight\">=? and \"RemoteArea\" =?", weight, weight, postzone.RemoteArea).First(&postfee)
 	//fmt.Printf("get cost order postzone is %s,  \n post fee is %s \n", postzone, postfee)
-	rtnOrder = models.OrderBalance{}
+	rtnOrder = model.OrderBalance{}
 	rtnOrder.ProductStockDate = stock.StockDay
 	rtnOrder.ProductStockNum = stock.SaleNums
 	rtnOrder.CostPrice = product.ProductPrice * float64(order.ProductQty)
@@ -183,44 +160,44 @@ func GetCostOrder(order models.OrderBalance) (rtnOrder models.OrderBalance) {
 	return rtnOrder
 }
 
-func GetPostCodeDest(postcode models.PostZone, remotearea string) (returnpc models.PostZone) {
+func GetPostCodeDest(postcode model.PostZone, remotearea string) (returnpc model.PostZone) {
 	//fmt.Printf("postcode is %s \n", &postcode)
 
 	//Db.Find(&postcode, "'StartCode' <= ? and 'EndCode' >= ? and 'RemoteArea' = ?", postcode.StartCode, postcode.EndCode, "1")
-	Db.Where("StartCode <= ? and EndCode >= ? and RemoteArea=?", postcode.StartCode, postcode.EndCode, remotearea).First(&returnpc)
+	db.PostgreDb.Where("StartCode <= ? and EndCode >= ? and RemoteArea=?", postcode.StartCode, postcode.EndCode, remotearea).First(&returnpc)
 
 	//fmt.Printf("sql is %s \n", returnpc)
 	return returnpc
 }
 
-func GetPostFee(postcode models.PostZone, remotearea string) (returnpf models.PostFee) {
+func GetPostFee(postcode model.PostZone, remotearea string) (returnpf model.PostFee) {
 	//fmt.Printf("postcode is %s \n", &postcode)
 
 	//Db.Find(&postcode, "'StartCode' <= ? and 'EndCode' >= ? and 'RemoteArea' = ?", postcode.StartCode, postcode.EndCode, "1")
-	Db.Where("StartCode <= ? and EndCode >= ? and RemoteArea=?", postcode.StartCode, postcode.EndCode, remotearea).First(&returnpf)
+	db.PostgreDb.Where("StartCode <= ? and EndCode >= ? and RemoteArea=?", postcode.StartCode, postcode.EndCode, remotearea).First(&returnpf)
 
 	//fmt.Printf("sql is %s \n", returnpc)
 	return returnpf
 }
 
-func WritePostCode(postZones []models.PostZone) {
+func WritePostCode(postZones []model.PostZone) {
 
 	fmt.Println("start insert table PostZone : \n")
 	for _, postZone := range postZones {
 		if postZone.StartCode != 0 || postZone.Supplier != "" {
-			Db.FirstOrCreate(&postZone, models.PostZone{Destination: postZone.Destination, StartCode: postZone.StartCode, EndCode: postZone.EndCode, Supplier: postZone.Supplier, SupplierDate: postZone.SupplierDate})
+			db.PostgreDb.FirstOrCreate(&postZone, model.PostZone{Destination: postZone.Destination, StartCode: postZone.StartCode, EndCode: postZone.EndCode, Supplier: postZone.Supplier, SupplierDate: postZone.SupplierDate})
 
 		}
 	}
 
 }
 
-func WritePostFee(postFees []models.PostFee) {
+func WritePostFee(postFees []model.PostFee) {
 
 	fmt.Println("start insert table PostFee : \n")
 	for _, postFee := range postFees {
 		if postFee.BasicFee != 0 || postFee.Supplier != "" {
-			Db.FirstOrCreate(&postFee, models.PostFee{Destination: postFee.Destination, StartWeight: postFee.StartWeight, EndWeight: postFee.EndWeight, Supplier: postFee.Supplier, SupplierDate: postFee.SupplierDate, BasicFee: postFee.BasicFee})
+			db.PostgreDb.FirstOrCreate(&postFee, model.PostFee{Destination: postFee.Destination, StartWeight: postFee.StartWeight, EndWeight: postFee.EndWeight, Supplier: postFee.Supplier, SupplierDate: postFee.SupplierDate, BasicFee: postFee.BasicFee})
 
 		}
 	}
@@ -237,7 +214,7 @@ func WriteWylSPUList(wylSPU []service.SPUList) {
 		for _, img := range SPU.ImgList {
 			SPU.Img += " " + img
 		}
-		Db.Create(&SPU)
+		db.PostgreDb.Create(&SPU)
 	}
 }
 
@@ -248,7 +225,7 @@ func WriteWylWarehouseList(whResult *service.WarehouseResult) {
 
 		fmt.Printf("%v", WareHouse)
 		WareHouse.CreatedAt = time.Now()
-		Db.Create(&WareHouse)
+		db.PostgreDb.Create(&WareHouse)
 
 	}
 }
@@ -256,9 +233,9 @@ func WriteWylWarehouseList(whResult *service.WarehouseResult) {
 func GetWylSPUList() (SPU []service.SPUList) {
 	fmt.Println("start get WylSPU: \n")
 	SPU = []service.SPUList{}
-	Db.Where("warehouse_code=?", "EWD").Find(&SPU)
+	db.PostgreDb.Where("warehouse_code=?", "EWD").Find(&SPU)
 	SKU := []service.SKUList{}
-	Db.Model(&SPU).Related(&SKU, "spu_list_id").Find(&SKU)
+	db.PostgreDb.Model(&SPU).Related(&SKU, "spu_list_id").Find(&SKU)
 
 	for _, data := range SKU {
 		fmt.Println("WylSKU: %v\n", data)
