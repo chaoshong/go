@@ -10,14 +10,12 @@ import (
 	serviceS "github.com/chaoshong/go/Service/Supplier"
 	sql "github.com/chaoshong/go/dao"
 	"github.com/chaoshong/go/model"
-
-	"github.com/chaoshong/go/inframe/db"
 )
 
 func main() {
 
 	//spider.GetRecruitment()
-	db.Init()
+	//db.Init()
 	//serviceS.GetProductFromWyl()
 	server := http.Server{
 		Addr: "127.0.0.1:8080",
