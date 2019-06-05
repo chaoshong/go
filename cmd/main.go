@@ -9,24 +9,26 @@ import (
 	service "github.com/chaoshong/go/Service"
 	serviceS "github.com/chaoshong/go/Service/Supplier"
 	sql "github.com/chaoshong/go/dao"
+	myhttp "github.com/chaoshong/go/http"
 	"github.com/chaoshong/go/model"
 )
 
 func main() {
 
 	//spider.GetRecruitment()
-	//db.Init()
 	//serviceS.GetProductFromWyl()
-	server := http.Server{
-		Addr: "127.0.0.1:8080",
-	}
+	// server := http.Server{
+	// 	Addr: "127.0.0.1:8080",
+	// }
 
-	http.HandleFunc("/wylview", handleWylview)
-	http.HandleFunc("/wyl", handleWyl)
-	http.HandleFunc("/wylwarehouse", handleWylWarehouse)
-	http.HandleFunc("/wylgetSPU", handleWylSPUList)
+	// http.HandleFunc("/wylview", handleWylview)
+	// http.HandleFunc("/wyl", handleWyl)
+	// http.HandleFunc("/wylwarehouse", handleWylWarehouse)
+	// http.HandleFunc("/wylgetSPU", handleWylSPUList)
 
-	server.ListenAndServe()
+	// server.ListenAndServe()
+
+	myhttp.New().Start()
 
 }
 
