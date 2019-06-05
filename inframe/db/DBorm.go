@@ -6,11 +6,12 @@ import (
 	"github.com/chaoshong/go/inframe/config"
 	"github.com/chaoshong/go/model"
 	"github.com/jinzhu/gorm"
+	_ "github.com/lib/pq"
 )
 
 var PostgreDb *gorm.DB
 
-func Init() {
+func init() {
 	var err error
 	fmt.Println("init DB\n")
 	dbType, dbString := config.GetDBInfo()
